@@ -1,0 +1,35 @@
+{
+  "name": "t32-asm",
+  "displayName": "T32 Assembly",
+  "description": "Syntax highlighting support for T32 assembly (.s32)",
+  "version": "0.0.1",
+  "publisher": "local",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Programming Languages"
+  ],
+  "contributes": {
+    "languages": [
+      {
+        "id": "t32",
+        "aliases": [
+          "T32",
+          "t32"
+        ],
+        "extensions": [
+          ".s32"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "t32",
+        "scopeName": "source.t32",
+        "path": "./syntaxes/t32.tmLanguage.json"
+      }
+    ]
+  }
+}

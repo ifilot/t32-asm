@@ -1,0 +1,97 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "T32 Assembly",
+  "scopeName": "source.t32",
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#directives"
+    },
+    {
+      "include": "#labels"
+    },
+    {
+      "include": "#mnemonics"
+    },
+    {
+      "include": "#numbers"
+    },
+    {
+      "include": "#labelRefs"
+    },
+    {
+      "include": "#strings"
+    }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.semicolon.t32",
+          "match": ";.*$"
+        }
+      ]
+    },
+    "directives": {
+      "patterns": [
+        {
+          "name": "keyword.control.directive.t32",
+          "match": "\\.(?:DATA|STRING)\\b"
+        }
+      ]
+    },
+    "labels": {
+      "patterns": [
+        {
+          "name": "entity.name.label.t32",
+          "match": "\\b[A-Za-z_][A-Za-z0-9_.]*:(?=\\s|$)"
+        }
+      ]
+    },
+    "mnemonics": {
+      "patterns": [
+        {
+          "name": "keyword.control.mnemonic.t32",
+          "match": "\\b(?:LDA|STA|LDI|LDP|JSR|RET|ADD|SUB|CMP|PSH|POP|JMP|JEQ|JNG|PRT|RTR|HLT|IDP|DDP|AND|ORR|XOR|SHL|SHR|LDL|LDH|SDL|SDH|ADI|SBI|CMI|NOP)\\b"
+        }
+      ]
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.hex.t32",
+          "match": "\\$[0-9A-Fa-f]+\\b"
+        },
+        {
+          "name": "constant.numeric.decimal.t32",
+          "match": "\\b\\d+\\b"
+        }
+      ]
+    },
+    "labelRefs": {
+      "patterns": [
+        {
+          "name": "variable.other.label.reference.t32",
+          "match": "@[A-Za-z_][A-Za-z0-9_.]*\\b"
+        }
+      ]
+    },
+    "strings": {
+      "patterns": [
+        {
+          "name": "string.quoted.double.t32",
+          "begin": "\"",
+          "end": "\"",
+          "patterns": [
+            {
+              "name": "constant.character.escape.t32",
+              "match": "\\\\[\\\\\"nrt0]"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
