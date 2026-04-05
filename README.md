@@ -1,5 +1,8 @@
 # T32
 
+[![Build](https://github.com/ifilot/t32-asm/actions/workflows/ci.yml/badge.svg)](https://github.com/ifilot/t32-asm/actions/workflows/ci.yml)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+
 ![T32 logo](img/t32-logo-128px.png)
 
 **T32** is a minimal instruction set architecture with **32 instructions**,
