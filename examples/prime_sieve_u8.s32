@@ -1,0 +1,190 @@
+;-------------------------------------------------------------------------------
+; prime_sieve_u8.s32
+; Prime generator for 8-bit values (2..255).
+; Note: computes primes at runtime (no precomputed prime table).
+;-------------------------------------------------------------------------------
+start:
+    LDI 2
+    LDP n
+    STA
+
+n_loop:
+    LDI 1
+    LDP is_prime
+    STA
+
+    LDI 2
+    LDP d
+    STA
+
+d_loop:
+    ; stop checking when d == n
+    LDP d
+    LDA
+    LDP n
+    CMP
+    JEQ divisors_done
+
+    ; rem = n
+    LDP n
+    LDA
+    LDP rem
+    STA
+
+mod_loop:
+    LDP rem
+    LDA
+    LDP d
+    CMP
+    JNG mod_done
+
+    LDP rem
+    LDA
+    LDP d
+    SUB
+    LDP rem
+    STA
+    JMP mod_loop
+
+mod_done:
+    LDP rem
+    LDA
+    CMI 0
+    JEQ composite
+
+    ; d++
+    LDP d
+    LDA
+    ADI 1
+    LDP d
+    STA
+    JMP d_loop
+
+composite:
+    LDI 0
+    LDP is_prime
+    STA
+
+divisors_done:
+    LDP is_prime
+    LDA
+    CMI 0
+    JEQ skip_print
+
+    LDP n
+    LDA
+    JSR printdec
+    JSR printnl
+
+skip_print:
+    LDP n
+    LDA
+    ADI 1
+    LDP n
+    STA
+    CMI 0
+    JEQ done
+    JMP n_loop
+
+done:
+    HLT
+
+;-------------------------------------------------------------------------------
+; printdec / printnl helpers
+;-------------------------------------------------------------------------------
+printdec:
+    PSH
+    LDP dec_n
+    STA
+    LDI 0
+    LDP hundreds
+    STA
+    LDP tens
+    STA
+    LDP ones
+    STA
+@hundreds_loop:
+    LDP dec_n
+    LDA
+    CMI 100
+    JNG @tens_loop
+    SBI 100
+    LDP dec_n
+    STA
+    LDP hundreds
+    LDA
+    ADI 1
+    STA
+    JMP @hundreds_loop
+@tens_loop:
+    LDP dec_n
+    LDA
+    CMI 10
+    JNG @finish_digits
+    SBI 10
+    LDP dec_n
+    STA
+    LDP tens
+    LDA
+    ADI 1
+    STA
+    JMP @tens_loop
+@finish_digits:
+    LDP dec_n
+    LDA
+    LDP ones
+    STA
+    LDP hundreds
+    LDA
+    CMI 0
+    JEQ @check_tens
+    LDP hundreds
+    JSR print_digit_at_dp
+    LDP tens
+    JSR print_digit_at_dp
+    LDP ones
+    JSR print_digit_at_dp
+    JMP @done
+@check_tens:
+    LDP tens
+    LDA
+    CMI 0
+    JEQ @ones_only
+    LDP tens
+    JSR print_digit_at_dp
+    LDP ones
+    JSR print_digit_at_dp
+    JMP @done
+@ones_only:
+    LDP ones
+    JSR print_digit_at_dp
+@done:
+    POP
+    RET
+
+print_digit_at_dp:
+    LDA
+    ADI 48
+    PRT
+    RET
+
+printnl:
+    PSH
+    LDI 10
+    PRT
+    POP
+    RET
+
+;-------------------------------------------------------------------------------
+; Data
+;-------------------------------------------------------------------------------
+n:        .data 0
+d:        .data 0
+rem:      .data 0
+is_prime: .data 0
+
+dec_n:    .data 0
+hundreds: .data 0
+tens:     .data 0
+ones:     .data 0
+;-------------------------------------------------------------------------------

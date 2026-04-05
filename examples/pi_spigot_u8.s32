@@ -1,0 +1,350 @@
+;-------------------------------------------------------------------------------
+; pi_spigot_u8.s32
+; 8-bit spigot generator (Rabinowitz/Wagon-style reduced configuration).
+; Emits the first 3 digits as: 3.14
+;-------------------------------------------------------------------------------
+start:
+    ; initialize a[1..10] = 2
+    LDI 1
+    LDP i
+    STA
+init_loop:
+    LDP i
+    LDA
+    JSR set_dp_a_index
+    LDI 2
+    STA
+
+    LDP i
+    LDA
+    ADI 1
+    LDP i
+    STA
+    CMI 11
+    JEQ init_done
+    JMP init_loop
+
+init_done:
+    LDI 2
+    LDP digits_left
+    STA
+    LDI 0
+    LDP printed
+    STA
+
+outer_loop:
+    LDP digits_left
+    LDA
+    CMI 0
+    JEQ done
+
+    LDI 0
+    LDP q
+    STA
+
+    LDI 10
+    LDP i
+    STA
+inner_loop:
+    LDP i
+    LDA
+    CMI 0
+    JEQ after_inner
+
+    ; ai = a[i]
+    JSR set_dp_a_index
+    LDA
+    LDP ai
+    STA
+
+    ; t10 = 10 * ai
+    LDP ai
+    LDA
+    LDP mul_left
+    STA
+    LDI 10
+    LDP mul_right
+    STA
+    JSR mul_u8
+    LDP mul_res
+    LDA
+    LDP t10
+    STA
+
+    ; tqi = q * i
+    LDP q
+    LDA
+    LDP mul_left
+    STA
+    LDP i
+    LDA
+    LDP mul_right
+    STA
+    JSR mul_u8
+    LDP mul_res
+    LDA
+    LDP tqi
+    STA
+
+    ; x = t10 + tqi
+    LDP t10
+    LDA
+    LDP tqi
+    ADD
+    LDP x
+    STA
+
+    ; d = 2*i - 1
+    LDP i
+    LDA
+    SHL
+    SBI 1
+    LDP d
+    STA
+
+    ; q = x / d ; rem = x % d
+    LDP x
+    LDA
+    LDP div_num
+    STA
+    LDP d
+    LDA
+    LDP div_den
+    STA
+    JSR divmod_u8
+
+    LDP div_quo
+    LDA
+    LDP q
+    STA
+
+    ; a[i] = rem
+    LDP div_rem
+    LDA
+    PSH
+    LDP i
+    LDA
+    JSR set_dp_a_index
+    POP
+    STA
+
+    ; i--
+    LDP i
+    LDA
+    SBI 1
+    LDP i
+    STA
+    JMP inner_loop
+
+after_inner:
+    ; a[1] = q % 10, digit = q / 10
+    LDP q
+    LDA
+    LDP div_num
+    STA
+    LDI 10
+    LDP div_den
+    STA
+    JSR divmod_u8
+
+    LDP div_rem
+    LDA
+    PSH
+    LDI 1
+    JSR set_dp_a_index
+    POP
+    STA
+
+    ; print digit
+    LDP div_quo
+    LDA
+    ADI 48
+    PRT
+
+    ; print decimal point after first digit
+    LDP printed
+    LDA
+    CMI 0
+    JEQ put_dot
+    JMP skip_dot
+put_dot:
+    LDI 46
+    PRT
+skip_dot:
+    LDP printed
+    LDA
+    ADI 1
+    LDP printed
+    STA
+
+    ; digits_left--
+    LDP digits_left
+    LDA
+    SBI 1
+    LDP digits_left
+    STA
+    JMP outer_loop
+
+done:
+    LDI 10
+    PRT
+    HLT
+
+;-------------------------------------------------------------------------------
+; set_dp_a_index: In A=index (1..10), Out DP=&a[index]
+;-------------------------------------------------------------------------------
+set_dp_a_index:
+    LDP a
+@loop:
+    CMI 0
+    JEQ @done
+    SBI 1
+    IDP
+    JMP @loop
+@done:
+    RET
+
+;-------------------------------------------------------------------------------
+; mul_u8: mul_res = mul_left * mul_right (repeated addition)
+;-------------------------------------------------------------------------------
+mul_u8:
+    LDI 0
+    LDP mul_res
+    STA
+@loop:
+    LDP mul_right
+    LDA
+    CMI 0
+    JEQ @done
+    SBI 1
+    LDP mul_right
+    STA
+
+    LDP mul_res
+    LDA
+    LDP mul_left
+    ADD
+    LDP mul_res
+    STA
+    JMP @loop
+@done:
+    RET
+
+;-------------------------------------------------------------------------------
+; ge_u8: geo = 1 if ge_a >= ge_b else 0 (unsigned)
+;-------------------------------------------------------------------------------
+ge_u8:
+    LDP ge_a
+    LDA
+    LDP ge_x
+    STA
+    LDP ge_b
+    LDA
+    LDP ge_y
+    STA
+@loop:
+    LDP ge_y
+    LDA
+    CMI 0
+    JEQ @true
+    LDP ge_x
+    LDA
+    CMI 0
+    JEQ @false
+
+    SBI 1
+    LDP ge_x
+    STA
+    LDP ge_y
+    LDA
+    SBI 1
+    LDP ge_y
+    STA
+    JMP @loop
+@true:
+    LDI 1
+    LDP geo
+    STA
+    RET
+@false:
+    LDI 0
+    LDP geo
+    STA
+    RET
+
+;-------------------------------------------------------------------------------
+; divmod_u8: div_num / div_den -> div_quo, div_rem (unsigned-safe)
+;-------------------------------------------------------------------------------
+divmod_u8:
+    LDI 0
+    LDP div_quo
+    STA
+    LDP div_num
+    LDA
+    LDP div_rem
+    STA
+@loop:
+    LDP div_rem
+    LDA
+    LDP ge_a
+    STA
+    LDP div_den
+    LDA
+    LDP ge_b
+    STA
+    JSR ge_u8
+
+    LDP geo
+    LDA
+    CMI 0
+    JEQ @done
+
+    LDP div_rem
+    LDA
+    LDP div_den
+    SUB
+    LDP div_rem
+    STA
+
+    LDP div_quo
+    LDA
+    ADI 1
+    LDP div_quo
+    STA
+    JMP @loop
+@done:
+    RET
+
+;-------------------------------------------------------------------------------
+; Data
+;-------------------------------------------------------------------------------
+digits_left: .data 0
+printed:     .data 0
+
+i:           .data 0
+q:           .data 0
+d:           .data 0
+x:           .data 0
+ai:          .data 0
+t10:         .data 0
+tqi:         .data 0
+
+mul_left:    .data 0
+mul_right:   .data 0
+mul_res:     .data 0
+
+div_num:     .data 0
+div_den:     .data 0
+div_quo:     .data 0
+div_rem:     .data 0
+
+ge_a:        .data 0
+ge_b:        .data 0
+ge_x:        .data 0
+ge_y:        .data 0
+geo:         .data 0
+
+a:
+    ; a[0] unused for convenience
+    .data 0,2,2,2,2,2,2,2,2,2,2
+;-------------------------------------------------------------------------------
