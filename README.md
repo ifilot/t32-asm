@@ -1,6 +1,6 @@
 # T32
 
-![T32 logo](img/t32-logo-256px.png)
+![T32 logo](img/t32-logo-128px.png)
 
 **T32** is a minimal instruction set architecture with **32 instructions**,
 combining a **register**, **stack**, and **memory tape** into a compact and
@@ -102,7 +102,7 @@ A useful oneliner for assembly and execution is as follows:
 APP="hello"; ./t32 assemble ../examples/${APP}.s32 ../examples/${APP}.o32 && ./t32 run ../examples/${APP}.o32
 ```
 
-## VS Code syntax highlighting for `.s32`
+## VS Code syntax highlighting for T32 source code
 
 A minimal VS Code language extension is included in [`vscode/`](vscode):
 
