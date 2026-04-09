@@ -1,0 +1,49 @@
+.hero {
+  text-align: center;
+  margin: 0 auto 2rem auto;
+  padding: 1.5rem 1rem 1.25rem 1rem;
+  border: 1px solid var(--table-border-color);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at top, rgba(240, 196, 25, 0.14), transparent 40%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.03), transparent);
+}
+
+.hero-logo {
+  width: 128px;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto 1rem auto;
+}
+
+.hero-tagline {
+  margin: 0;
+  font-size: 1.05rem;
+  color: var(--fg);
+}
+
+.hljs-keyword,
+.hljs-built_in {
+  color: #c67800;
+  font-weight: 600;
+}
+
+.hljs-symbol,
+.hljs-title {
+  color: #005cc5;
+}
+
+.hljs-number,
+.hljs-literal {
+  color: #8a2be2;
+}
+
+.hljs-string {
+  color: #0a7f4f;
+}
+
+.hljs-comment {
+  color: #6a737d;
+  font-style: italic;
+}

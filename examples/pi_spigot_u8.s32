@@ -25,7 +25,7 @@ init_loop:
     JMP init_loop
 
 init_done:
-    LDI 2
+    LDI 10
     LDP digits_left
     STA
     LDI 0
@@ -346,5 +346,5 @@ geo:         .data 0
 
 a:
     ; a[0] unused for convenience
-    .data 0,2,2,2,2,2,2,2,2,2,2
+    .data 0,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2
 ;-------------------------------------------------------------------------------

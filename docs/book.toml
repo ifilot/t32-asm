@@ -1,0 +1,18 @@
+[book]
+authors = ["Ivo Filot"]
+language = "en"
+src = "src"
+title = "The T32 Book"
+description = "A kind introduction to the T32 architecture and assembly language."
+
+[build]
+build-dir = "book"
+create-missing = false
+
+[output.html]
+default-theme = "light"
+preferred-dark-theme = "navy"
+git-repository-url = "https://github.com/ifilot/t32-asm"
+site-url = "/t32-asm/"
+additional-css = ["theme/custom.css"]
+additional-js = ["theme/t32-highlight.js"]
