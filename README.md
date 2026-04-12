@@ -9,32 +9,6 @@
 combining a **register**, **stack**, and **memory tape** into a compact and
 expressive computational model.
 
-## Documentation
-
-A book-style documentation scaffold is included in [`docs/`](docs), using
-[`mdBook`](https://rust-lang.github.io/mdBook/), the same platform used by Rust
-for its book-style documentation.
-
-To view the docs locally:
-
-```bash
-cargo install mdbook
-cd docs
-mdbook serve
-```
-
-This opens a friendly chapter-based manual covering:
-
-- a gentle introduction to T32
-- machine architecture and source syntax
-- a first-program walkthrough
-- control flow, stack usage, and data handling
-- a compact instruction reference
-- pointers to the repository examples
-
-The book is also set up for deployment with GitHub Pages through
-`.github/workflows/pages.yml`.
-
 ## Machine Architecture
 
 T32 operates on a small set of components:
