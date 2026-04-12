@@ -7,7 +7,6 @@ The repository already contains a nice set of real examples:
 - [`examples/int2dec.s32`](https://github.com/ifilot/t32-asm/blob/main/examples/int2dec.s32)
 - [`examples/int2hex.s32`](https://github.com/ifilot/t32-asm/blob/main/examples/int2hex.s32)
 - [`examples/prime_sieve_u8.s32`](https://github.com/ifilot/t32-asm/blob/main/examples/prime_sieve_u8.s32)
-- [`examples/pi_spigot_u8.s32`](https://github.com/ifilot/t32-asm/blob/main/examples/pi_spigot_u8.s32)
 
 ## Suggested reading order
 
@@ -18,7 +17,6 @@ If you are new to T32, this order works well:
 3. `fibo.s32`
 4. `int2hex.s32`
 5. `prime_sieve_u8.s32`
-6. `pi_spigot_u8.s32`
 
 That progression starts with simple output, then moves through data handling,
 subroutines, loops, and larger algorithmic programs.
@@ -31,6 +29,3 @@ The examples in this repository already follow a helpful style:
 - sublabels keep loops local
 - comments explain intent
 - data is grouped near the bottom
-
-That is a strong foundation for the rest of the book. As the documentation grows,
-these examples can become chapter anchors and worked walkthroughs.
