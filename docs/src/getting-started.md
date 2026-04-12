@@ -72,25 +72,6 @@ APP="hello"
 You can think of `assemble` as producing the bytes that would live in T32
 memory, and `run` as starting the fictional processor inside the emulator.
 
-## Building this book
-
-This documentation is set up for [`mdBook`](https://rust-lang.github.io/mdBook/),
-the same documentation platform used by Rust for book-style documentation.
-
-If you have Rust installed, you can install `mdbook` with:
-
-```bash
-cargo install mdbook
-```
-
-Then, from the `docs/` directory:
-
-```bash
-mdbook serve
-```
-
-That opens a local book website with navigation, search, and chapter layout.
-
 ## Where to go next
 
 If you want the big picture first, continue to [The Machine](./the-machine.md).
